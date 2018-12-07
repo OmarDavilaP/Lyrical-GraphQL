@@ -5,7 +5,10 @@ class CreateSong extends Component{
     constructor(){
         super();
         this.handleAddSong=this.handleAddSong.bind(this);
-        console.log("this",this)
+        this.state={
+            title:''
+        }
+    
     }
 
     handleCreate(e){
@@ -14,13 +17,13 @@ class CreateSong extends Component{
     }
 
     handleAddSong(e){
-        console.log("this",this);
+        this.setState({title:e.target.value});
     }
 
     render(){
         return(
             <div>
-                <h3>Create new path</h3>
+                <h3>Create new path: {this.state.title}</h3>
                 <form onSubmit={this.handleCreate.bind(this)}>
                     <input type="text" onChange={this.handleAddSong}  />
                 </form>
