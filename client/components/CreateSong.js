@@ -1,4 +1,9 @@
 import React, {Component} from 'react';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
+import {Link,hashHistory} from 'react-router';
+import query from '../queries/querySongs';
+
 
 class CreateSong extends Component{
 
@@ -13,6 +18,12 @@ class CreateSong extends Component{
 
     handleCreate(e){
         e.preventDefault();
+        this.props.mutate({ //Add song
+            variables:{
+                title:this.state.title
+            },
+            refetchQueries:[{query}] //let to graph to know refetch the query because the are a new member
+        }).then(()=>hashHistory.push("/"));
         
     }
 
@@ -23,6 +34,7 @@ class CreateSong extends Component{
     render(){
         return(
             <div>
+                <Link to="/">Back</Link>
                 <h3>Create new path: {this.state.title}</h3>
                 <form onSubmit={this.handleCreate.bind(this)}>
                     <input type="text" onChange={this.handleAddSong}  />
@@ -31,5 +43,13 @@ class CreateSong extends Component{
         );
     }
 }
+//mutation GraphQL
+const mutation=gql`
+    mutation AddSong($title:String){
+        addSong(title:$title){
+            id
+        }
+    }
+`;
 
-export default CreateSong;
+export default graphql(mutation)(CreateSong) ; //Always passed by props like redux

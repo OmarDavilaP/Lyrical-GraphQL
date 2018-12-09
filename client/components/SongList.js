@@ -1,19 +1,50 @@
 import React, {Component} from 'react';
+import query from '../queries/querySongs';
+//Third party libraries
+import {Link} from 'react-router';
+//GraphQL
 import gql from 'graphql-tag';
 import {graphql} from 'react-apollo';
-import query from '../queries/querySongs';
+
 
 class SongList extends Component{
+
+    constructor(){
+        super();
+        this.handleDeleteSong=this.handleDeleteSong.bind(this);
+    }
+
+    handleDeleteSong(id){
+        this.props.mutate({
+            variables:{
+                id
+            },
+            refetchQueries:[{query}]
+        })
+    }
     
     render(){
         if(!this.props.data.songs) return <div>...Loading</div>
         return(
+            <div>
             <ul>
-                {this.props.data.songs.map(res=> <li key={res.id}>{res.title}</li>)}
+                {this.props.data.songs.map(res=> <li key={res.id}>{res.title}<i className="material-icons" onClick={()=>this.handleDeleteSong(res.id)}>delete</i></li>)}                
             </ul>
+            <Link to="new/song" className="btn-floating btn-large red right">
+            <i className="material-icons">add</i> 
+            </Link>
+            </div> 
         );
     }
 
 }
 
-export default graphql(query)(SongList);
+const mutation=gql`
+    mutation DeleteSong($id:ID){
+        deleteSong(id:$id){
+            id
+        }
+    }
+`;
+
+export default graphql (mutation)(graphql(query)(SongList));
