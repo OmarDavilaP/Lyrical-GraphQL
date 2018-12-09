@@ -20,7 +20,7 @@ class SongList extends Component{
                 id
             },
             refetchQueries:[{query}]
-        })
+        }).then(()=>this.props.data.refetch());
     }
     
     render(){
