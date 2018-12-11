@@ -27,10 +27,10 @@ class SongList extends Component{
         if(!this.props.data.songs) return <div>...Loading</div>
         return(
             <div>
-            <ul>
-                {this.props.data.songs.map(res=> <li key={res.id}>{res.title}<i className="material-icons" onClick={()=>this.handleDeleteSong(res.id)}>delete</i></li>)}                
+            <ul >
+                {this.props.data.songs.map(res=> <li className="collection-item" key={res.id}>{res.title}<i className="material-icons" onClick={()=>this.handleDeleteSong(res.id)}>delete</i></li>)}                
             </ul>
-            <Link to="new/song" className="btn-floating btn-large red right">
+            <Link to="songs/new" className="btn-floating btn-large red right">
             <i className="material-icons">add</i> 
             </Link>
             </div> 
